@@ -1,6 +1,7 @@
 let iKey = document.getElementById('iKey')
 let $bShow = document.getElementById('bShow')
 let $table = document.getElementById('presenters')
+let $tbody = $table.querySelector('tbody')
 let peoples = ['Леша', 'Ваня', 'Маша', 'Настя','Мама','Папа']
 let exceptions = [["Мама","Папа"],["Мама","Маша"],["Мама","Леша"],["Мама","Настя"],["Леша","Маша"],["Леша","Папа"],["Леша","Мама"]] //Исключения [Даритель, Получатель]
 const count = peoples.length
@@ -10,7 +11,7 @@ onKeyInput(iKey)
 function onKeyInput(iKey) {
 	let val = iKey.value
 	val = val !== '' ? Number(iKey.value) : NaN
-	if (!isNaN(val) && 0 <= val && val <= 512) {
+	if (!isNaN(val)) {
 		console.log('123', val, typeof val, !isNaN(val))
 		$bShow.disabled = false
 	}
@@ -20,10 +21,11 @@ function onKeyInput(iKey) {
 }
 
 function generatePresenters() {
+	$tbody.innerHTML = ''
 	$bShow.disabled = true
 	//объект псведослучайных чисел
 	let generator = new LinearCongruentialGenerator(
-		((Number(iKey.value))%512  + 512)* 437,
+		(Math.floor(Math.abs(Number(iKey.value)))%512  + 512)* 437, //тут мы получаем ключ из поля ввода
 		1664525,
 		1013904223,
 		4294967296)
@@ -61,7 +63,7 @@ function generatePresenters() {
 		let $tdReceiver = document.createElement('td')
 		$tdReceiver.innerText = receivers[i]
 		$tr.append($tdPresenter, $tdReceiver)
-		$table.querySelector('tbody').appendChild($tr)
+		$tbody.appendChild($tr)
 	}
 	//Включение отображения таблицы
 	$table.style.display = 'block'
