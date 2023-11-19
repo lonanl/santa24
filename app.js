@@ -9,10 +9,11 @@ const count = peoples.length
 onKeyInput(iKey)
 
 function onKeyInput(iKey) {
+	if(isNaN(Number(iKey.value.at(-1))))
+		iKey.value = iKey.value.substring(0, iKey.value.length - 1) 
 	let val = iKey.value
 	val = val !== '' ? Number(iKey.value) : NaN
 	if (!isNaN(val)) {
-		console.log('123', val, typeof val, !isNaN(val))
 		$bShow.disabled = false
 	}
 	else {
