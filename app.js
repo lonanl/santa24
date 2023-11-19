@@ -79,8 +79,9 @@ function generatePresenters() {
 	for (let i = 0; i < count; i ++) {
 		let $tr = document.createElement('tr')
 		let $tdPresenter = document.createElement('td')
-		$tdPresenter.innerText = presenters[i]+' →'
-		$tdPresenter.classList.add('text-end')
+		$tdPresenter.innerText = presenters[i]
+		// $tdPresenter.innerText = presenters[i]+' →'
+		// $tdPresenter.classList.add('text-end')
 		let $tdReceiver = document.createElement('td')
 		$tdReceiver.innerText = receivers[i]
 		$tr.append($tdPresenter, $tdReceiver)
