@@ -2,23 +2,40 @@ let iKey = document.getElementById('iKey')
 let $bShow = document.getElementById('bShow')
 let $table = document.getElementById('presenters')
 let $tbody = $table.querySelector('tbody')
-let peoples = ['Леша', 'Ваня', 'Маша', 'Настя','Мама','Папа']
-let exceptions = [["Мама","Папа"],["Мама","Маша"],["Мама","Леша"],["Мама","Настя"],["Леша","Маша"],["Леша","Папа"],["Леша","Мама"]] //Исключения [Даритель, Получатель]
+let peoples = ["Ашарина Света (Мама)",
+	"Ашарин Миша (Папа)",
+	"Ашарин Андрей",
+	"Ашарин Николка",
+	"Ашарина Маша (Пух)",
+	"Ашарин Леша",
+	"Ашарин Ваня",
+	"Ашарина Настя",
+	"Емельянова Таня",
+	"Емельянов Миша",
+	"Емельянова Танюшка",
+	"Емельянов Костя",
+	"Емельянов Саша",
+	"Бабушка Света",
+	"Белов Саша",
+	"Ашарина Маша (Андрюшкина)",
+	"Ашарина Настя (Николкина)",
+	"Николаев Влад",
+	"Тимошка"
+]
+let exceptions = [["Ашарина Света (Мама)","Ашарина Света (Мама)"],["Ашарина Света (Мама)","Емельянова Таня"],["Ашарин Миша (Папа)","Ашарина Света (Мама)"],["Ашарин Леша","Ашарин Андрей"],["Ашарин Леша","Белов Саша"],["Бабушка Света","Ашарин Леша"]] //Исключения [Даритель, Получатель]
 const count = peoples.length
+let pre = [], rec = []
 
 onKeyInput(iKey)
 
 function onKeyInput(iKey) {
-	if(isNaN(Number(iKey.value.at(-1))))
-		iKey.value = iKey.value.substring(0, iKey.value.length - 1) 
+	if(isNaN(Number(iKey.value.at(-1)))){
+		// console.log(iKey.value.substring(0, iKey.value.length - 1))
+		iKey.value.substring(0, iKey.value.length - 1)
+	}
 	let val = iKey.value
 	val = val !== '' ? Number(iKey.value) : NaN
-	if (!isNaN(val)) {
-		$bShow.disabled = false
-	}
-	else {
-		$bShow.disabled = true
-	}
+	$bShow.disabled = isNaN(val);
 }
 
 function generatePresenters() {
@@ -43,6 +60,7 @@ function generatePresenters() {
 		console.log(a,b)
 	}
 	
+	let iterations = 0
 	//продолжение перестановок до тех пор пока не пройдет проверку
 	while(true){
 		let swapping = check(presenters,receivers) //получение отправителя, который не может дарить подарок самому себе или исключению
@@ -53,7 +71,9 @@ function generatePresenters() {
 			let b = generator.randIntBetween(0, count-1)
 			presenters[swapping] = [presenters[b], presenters[b] = presenters[swapping]][0];
 		}
+		iterations++
 	}
+	console.log(iterations)
 	
 	//Добавление списка в таблицу
 	for (let i = 0; i < count; i ++) {
@@ -68,11 +88,15 @@ function generatePresenters() {
 	}
 	//Включение отображения таблицы
 	$table.style.display = 'block'
+	pre = [...presenters]
+	rec = [...receivers]
 }
 
 function check(presenters, receivers) {
 	for (let i = 0; i < count; i ++) {
 		if(presenters[i]===receivers[i])
+			return i
+		if(receivers[presenters.indexOf(receivers[i])] === presenters[i])
 			return i
 		for (let exception of exceptions) {
 			if(exception[0]===presenters[i] && exception[1]===receivers[i])
