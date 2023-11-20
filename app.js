@@ -30,10 +30,11 @@ const count = peoples.length
 let pre = [], rec = []
 
 let previousValue = ''
+// iKey.value = ''
 onKeyInput(iKey)
 function onKeyInput(iKey) {
 	if(isNaN(Number(iKey.value.at(-1)))){
-		iKey.value = previousValue
+		iKey.value = iKey.value === '' ? '' : previousValue
 		console.log(iKey.value)
 	}
 	previousValue = iKey.value
